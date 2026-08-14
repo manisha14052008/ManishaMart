@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ManishaMart</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 700px; margin: 20px auto; padding: 0 15px; }
+  h1 { color: #333; }
+  section { border: 1px solid #ddd; border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+  input, select, button { padding: 8px; margin: 4px 0; width: 100%; box-sizing: border-box; }
+  button { background: #2c7be5; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  .product { border-bottom: 1px solid #eee; padding: 8px 0; }
+  .cart-item { display: flex; justify-content: space-between; padding: 4px 0; }
+  #status { color: green; font-weight: bold; }
+  #error { color: red; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<h1>ManishaMart</h1>
+<div id="status"></div>
+<div id="error"></div>
+
+<section>
+  <h2>Register</h2>
+  <input id="reg-name" placeholder="Name">
+  <input id="reg-email" placeholder="Email">
+  <input id="reg-password" type="password" placeholder="Password (min 8 chars)">
+  <select id="reg-role">
+    <option value="BUYER">Buyer</option>
+    <option value="SELLER">Seller</option>
+  </select>
+  <button onclick="register()">Register</button>
+</section>
+
+<section>
+  <h2>Login</h2>
+  <input id="login-email" placeholder="Email">
+  <input id="login-password" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <button onclick="logout()">Logout</button>
+</section>
+
+<section>
+  <h2>Products</h2>
+  <input id="search-box" placeholder="Search products...">
+  <button onclick="loadProducts()">Search</button>
+  <div id="product-list"></div>
+</section>
+
+<section>
+  <h2>Cart</h2>
+  <button onclick="loadCart()">Refresh Cart</button>
+  <div id="cart-list"></div>
+  <p>Total: ₹<span id="cart-total">0.00</span></p>
+  <button onclick="checkout()">Place Order (Mock Payment)</button>
+</section>
+
+<section>
+  <h2>My Orders</h2>
+  <button onclick="loadOrders()">Load Orders</button>
+  <div id="order-list"></div>
+</section>
+
+<script>
+const API = '/api/v1';
+
+function showStatus(msg) {
+  document.getElementById('status').textContent = msg;
+  document.getElementById('error').textContent = '';
+}
+function showError(msg) {
+  document.getElementById('error').textContent = msg;
+  document.getElementById('status').textContent = '';
+}
+
+async function register() {
+  const body = {
+    name: document.getElementById('reg-name').value,
+    email: document.getElementById('reg-email').value,
+    password: document.getElementById('reg-password').value,
+    role: document.getElementById('reg-role').value
+  };
+  const res = await fetch(`${API}/auth/register`, {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  data.success ? showStatus('Registered and logged in!') : showError(data.error.message);
+}
+
+async function login() {
+  const body = {
+    email: document.getElementById('login-email').value,
+    password: document.getElementById('login-password').value
+  };
+  const res = await fetch(`${API}/auth/login`, {
+    method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  data.success ? showStatus('Logged in as ' + data.data.name) : showError(data.error.message);
+}
+
+async function logout() {
+  await fetch(`${API}/auth/logout`, { method: 'POST' });
+  showStatus('Logged out');
+}
+
+async function loadProducts() {
+  const q = document.getElementById('search-box').value;
+  const url = q ? `${API}/products?q=${encodeURIComponent(q)}` : `${API}/products`;
+  const res = await fetch(url);
+  const data = await res.json();
+  const list = document.getElementById('product-list');
+  list.innerHTML = '';
+  if (data.success) {
+    data.data.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.innerHTML = `<strong>${p.name}</strong> - ₹${p.price} (stock: ${p.stockQty})
+        <button onclick="addToCart(${p.id})">Add to Cart</button>`;
+      list.appendChild(div);
+    });
+  }
+}
+
+async function addToCart(productId) {
+  const res = await fetch(`${API}/cart`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ productId, quantity: 1 })
+  });
+  const data = await res.json();
+  data.success ? showStatus('Added to cart') : showError(data.error.message);
+}
+
+async function loadCart() {
+  const res = await fetch(`${API}/cart`);
+  const data = await res.json();
+  const list = document.getElementById('cart-list');
+  list.innerHTML = '';
+  if (data.success) {
+    data.data.items.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'cart-item';
+      div.innerHTML = `<span>Product #${item.productId} x ${item.quantity}</span>
+        <button onclick="removeFromCart(${item.id})">Remove</button>`;
+      list.appendChild(div);
+    });
+    document.getElementById('cart-total').textContent = data.data.total;
+  } else {
+    showError(data.error.message);
+  }
+}
+
+async function removeFromCart(itemId) {
+  await fetch(`${API}/cart/${itemId}`, { method: 'DELETE' });
+  loadCart();
+}
+
+async function checkout() {
+  const res = await fetch(`${API}/orders`, { method: 'POST' });
+  const data = await res.json();
+  if (data.success) {
+    showStatus('Order placed! ID: ' + data.data.id);
+    loadCart();
+  } else {
+    showError(data.error.message);
+  }
+}
+
+async function loadOrders() {
+  const res = await fetch(`${API}/orders`);
+  const data = await res.json();
+  const list = document.getElementById('order-list');
+  list.innerHTML = '';
+  if (data.success) {
+    data.data.forEach(o => {
+      const div = document.createElement('div');
+      div.className = 'product';
+      div.textContent = `Order #${o.id} - ${o.status} - ₹${o.totalAmount}`;
+      list.appendChild(div);
+    });
+  }
+}
+
+loadProducts();
+</script>
+</body>
+  </html>
