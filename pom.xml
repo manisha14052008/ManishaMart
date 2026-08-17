@@ -64,6 +64,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
             </plugin>
+<<<<<<< HEAD
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -74,5 +75,16 @@
                 </configuration>
             </plugin>
         </plugins>
+=======
+        <plugin>
+                            <groupId>org.apache.tomcat.maven</groupId>
+                                                <artifactId>tomcat7-maven-plugin</artifactId>
+                                                                    <version>2.2</version>
+                                                                                        <configuration>
+                                                                                                                <path>/manishamart</path>
+                                                                                                                                        <port>8080</port>
+                                                                                                                                                            </configuration>
+                                                                                                                                                                            </plugin>
+>>>>>>> 793988b (add tomcat7 maven plugin)
     </build>
 </project>
