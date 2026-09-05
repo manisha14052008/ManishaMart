@@ -28,7 +28,8 @@
                                                                                                                                                                                       <version>2.2.224</version>
                                                                                                                                                                                               </dependency>
                                                                                                                                                                                                       <dependency>
-                                                                                                                                                                                                                  <groupId>com.zaxxer</groupId>
+                    
+                                                                                                                                                                                                     <groupId>com.zaxxer</groupId>
                                                                                                                                                                                                                               <artifactId>HikariCP</artifactId>
                                                                                                                                                                                                                                           <version>5.1.0</version>
                                                                                                                                                                                                                                                   </dependency>
@@ -57,7 +58,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </dependencies>
 
     <build>
-            <finalName>manishamart</finalName>
+            <finalName>ManishaMart</finalName>
                     <plugins>
                                 <plugin>
                                                 <groupId>org.apache.maven.plugins</groupId>

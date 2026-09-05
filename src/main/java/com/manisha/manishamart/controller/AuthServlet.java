@@ -33,6 +33,7 @@ public class AuthServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String path = req.getPathInfo();
+        System.err.println("DEBUG PATH: [" + path + "]");
         resp.setContentType("application/json");
 
         try {

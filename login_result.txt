@@ -1,0 +1,23 @@
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+> POST /manishamart/api/v1/auth/login HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 54
+> 
+} [54 bytes data]
+< HTTP/1.1 404 
+< Content-Type: application/json;charset=UTF-8
+< Content-Length: 0
+< Date: Wed, 26 Aug 2026 13:23:27 GMT
+< 
+100    54    0     0  100    54      0    662 --:--:-- --:--:-- --:--:--   666
+* Connection #0 to host localhost left intact

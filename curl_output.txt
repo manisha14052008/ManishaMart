@@ -1,0 +1,26 @@
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:8080 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:8080...
+* Connected to localhost (::1) port 8080
+> POST /api/v1/auth/login HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/8.5.0
+> Accept: */*
+> Content-Type: application/json
+> Content-Length: 37
+> 
+} [37 bytes data]
+< HTTP/1.1 404 
+< Content-Type: text/html;charset=utf-8
+< Content-Language: en
+< Content-Length: 781
+< Date: Wed, 26 Aug 2026 13:31:23 GMT
+< 
+{ [781 bytes data]
+100   818  100   781  100    37   142k   6923 --:--:-- --:--:-- --:--:--  199k
+* Connection #0 to host localhost left intact
+<!doctype html><html lang="en"><head><title>HTTP Status 404 – Not Found</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1><hr class="line" /><p><b>Type</b> Status Report</p><p><b>Message</b> The requested resource [&#47;api&#47;v1&#47;auth&#47;login] is not available</p><p><b>Description</b> The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.</p><hr class="line" /><h3>Apache Tomcat/9.0.120</h3></body></html>
